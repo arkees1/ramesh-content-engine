@@ -1,23 +1,15 @@
+import { useState } from "react";
 import Header from "./components/Header";
-import FeatureCard from "./components/FeatureCard";
-import { features } from "./data/features";
+import Generator from "./components/Generator";
 
 export default function App() {
-  const userPlan = "FREE"; // later dynamic
+  const [credits, setCredits] = useState(50);
+  const userPlan = "FREE";
+
   return (
     <>
-      <Header plan={userPlan} credits={50} />
-
-      <div className="grid">
-        {features.map(f => (
-          <FeatureCard
-            key={f.id}
-            title={f.title}
-            plan={f.plan}
-            userPlan={userPlan}
-          />
-        ))}
-      </div>
+      <Header plan={userPlan} credits={credits} />
+      <Generator credits={credits} setCredits={setCredits} />
     </>
   );
 }
