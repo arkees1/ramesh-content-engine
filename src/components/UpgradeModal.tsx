@@ -2,10 +2,12 @@ type Plan = "FREE" | "MEDIUM" | "PREMIUM";
 
 export default function UpgradeModal({
   open,
-  onClose
+  onClose,
+  onSelectPlan
 }: {
   open: boolean;
   onClose: () => void;
+  onSelectPlan: (plan: Plan) => void;
 }) {
   if (!open) return null;
 
@@ -13,20 +15,25 @@ export default function UpgradeModal({
     <div className="modal-overlay">
       <div className="modal">
         <h2>Upgrade ARKEES AI 🚀</h2>
-        <p>Unlock powerful tools designed for serious creators.</p>
+        <p>Select a plan to unlock more power.</p>
 
-        <ul className="plans">
-          <li><strong>FREE</strong> – Basic content (50 credits)</li>
-          <li><strong>MEDIUM</strong> – PDF + Business tools (200 credits)</li>
-          <li><strong>PREMIUM</strong> – All tools unlocked (500 credits)</li>
-        </ul>
+        <div className="plan-cards">
+          <button onClick={() => onSelectPlan("FREE")}>
+            FREE <br /> 50 Credits
+          </button>
 
-        <div className="modal-actions">
-          <button className="primary">Upgrade Now</button>
-          <button className="secondary" onClick={onClose}>
-            Maybe Later
+          <button onClick={() => onSelectPlan("MEDIUM")}>
+            MEDIUM <br /> 200 Credits
+          </button>
+
+          <button onClick={() => onSelectPlan("PREMIUM")}>
+            PREMIUM <br /> 500 Credits
           </button>
         </div>
+
+        <button className="secondary" onClick={onClose}>
+          Cancel
+        </button>
       </div>
     </div>
   );

@@ -17,27 +17,37 @@ const getCurrentMonth = () => {
 };
 
 export default function App() {
-  const [plan] = useState<Plan>("FREE");
-  const [credits, setCredits] = useState<number>(PLAN_CREDITS[plan]);
+  const [plan, setPlan] = useState<Plan>(
+    (localStorage.getItem("plan") as Plan) || "FREE"
+  );
+  const [credits, setCredits] = useState<number>(
+    Number(localStorage.getItem("credits")) || PLAN_CREDITS[plan]
+  );
   const [showUpgrade, setShowUpgrade] = useState(false);
 
+  // Monthly credit reset
   useEffect(() => {
-    const savedCredits = localStorage.getItem("credits");
     const lastReset = localStorage.getItem("lastReset");
     const currentMonth = getCurrentMonth();
 
     if (lastReset !== currentMonth) {
+      setCredits(PLAN_CREDITS[plan]);
       localStorage.setItem("credits", PLAN_CREDITS[plan].toString());
       localStorage.setItem("lastReset", currentMonth);
-      setCredits(PLAN_CREDITS[plan]);
-    } else if (savedCredits) {
-      setCredits(parseInt(savedCredits));
     }
   }, [plan]);
 
+  // Persist plan & credits
   useEffect(() => {
+    localStorage.setItem("plan", plan);
     localStorage.setItem("credits", credits.toString());
-  }, [credits]);
+  }, [plan, credits]);
+
+  const handlePlanSelect = (newPlan: Plan) => {
+    setPlan(newPlan);
+    setCredits(PLAN_CREDITS[newPlan]);
+    setShowUpgrade(false);
+  };
 
   return (
     <>
@@ -60,6 +70,7 @@ export default function App() {
       <UpgradeModal
         open={showUpgrade}
         onClose={() => setShowUpgrade(false)}
+        onSelectPlan={handlePlanSelect}
       />
     </>
   );
