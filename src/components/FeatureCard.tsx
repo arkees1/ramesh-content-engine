@@ -25,9 +25,7 @@ export default function FeatureCard({ title, minPlan, userPlan, onUpgrade }: Pro
           🔒 Upgrade to {minPlan}
         </button>
       ) : (
-        <button className="open-btn">
-          ▶ Open
-        </button>
+        <button className="open-btn">▶ Open</button>
       )}
 
       <span className={`badge ${minPlan.toLowerCase()}`}>{minPlan}</span>

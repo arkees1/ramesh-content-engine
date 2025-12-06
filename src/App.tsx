@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import FeatureCard from "./components/FeatureCard";
 import Generator from "./components/Generator";
+import UpgradeModal from "./components/UpgradeModal";
 import { FEATURES, Plan } from "./data/features";
 
 const PLAN_CREDITS: Record<Plan, number> = {
@@ -16,10 +17,10 @@ const getCurrentMonth = () => {
 };
 
 export default function App() {
-  const [plan, setPlan] = useState<Plan>("FREE");
+  const [plan] = useState<Plan>("FREE");
   const [credits, setCredits] = useState<number>(PLAN_CREDITS[plan]);
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
-  // Monthly credit reset (from Step 5A)
   useEffect(() => {
     const savedCredits = localStorage.getItem("credits");
     const lastReset = localStorage.getItem("lastReset");
@@ -38,15 +39,10 @@ export default function App() {
     localStorage.setItem("credits", credits.toString());
   }, [credits]);
 
-  const handleUpgrade = () => {
-    alert("Upgrade flow coming soon 🚀");
-  };
-
   return (
     <>
       <Header plan={plan} credits={credits} />
 
-      {/* Feature Dashboard */}
       <div className="grid">
         {FEATURES.map(f => (
           <FeatureCard
@@ -54,13 +50,17 @@ export default function App() {
             title={f.title}
             minPlan={f.minPlan}
             userPlan={plan}
-            onUpgrade={handleUpgrade}
+            onUpgrade={() => setShowUpgrade(true)}
           />
         ))}
       </div>
 
-      {/* Generator remains for FREE core usage */}
       <Generator credits={credits} setCredits={setCredits} />
+
+      <UpgradeModal
+        open={showUpgrade}
+        onClose={() => setShowUpgrade(false)}
+      />
     </>
   );
 }
