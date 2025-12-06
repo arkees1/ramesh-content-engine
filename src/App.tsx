@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import FeatureCard from "./components/FeatureCard";
 import Generator from "./components/Generator";
 import UpgradeModal from "./components/UpgradeModal";
+import Pricing from "./components/Pricing";
 import { FEATURES, Plan } from "./data/features";
 
 const PLAN_CREDITS: Record<Plan, number> = {
@@ -25,7 +26,7 @@ export default function App() {
   );
   const [showUpgrade, setShowUpgrade] = useState(false);
 
-  // Monthly credit reset
+  // Monthly reset
   useEffect(() => {
     const lastReset = localStorage.getItem("lastReset");
     const currentMonth = getCurrentMonth();
@@ -37,13 +38,12 @@ export default function App() {
     }
   }, [plan]);
 
-  // Persist plan & credits
   useEffect(() => {
     localStorage.setItem("plan", plan);
     localStorage.setItem("credits", credits.toString());
   }, [plan, credits]);
 
-  const handlePlanSelect = (newPlan: Plan) => {
+  const switchPlan = (newPlan: Plan) => {
     setPlan(newPlan);
     setCredits(PLAN_CREDITS[newPlan]);
     setShowUpgrade(false);
@@ -52,6 +52,8 @@ export default function App() {
   return (
     <>
       <Header plan={plan} credits={credits} />
+
+      <Pricing currentPlan={plan} onSelect={switchPlan} />
 
       <div className="grid">
         {FEATURES.map(f => (
@@ -70,7 +72,7 @@ export default function App() {
       <UpgradeModal
         open={showUpgrade}
         onClose={() => setShowUpgrade(false)}
-        onSelectPlan={handlePlanSelect}
+        onSelectPlan={switchPlan}
       />
     </>
   );
