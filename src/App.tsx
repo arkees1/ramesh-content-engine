@@ -1,19 +1,23 @@
-import { useState } from "react";
 import Header from "./components/Header";
-import PlanSelector from "./components/PlanSelector";
-import Generator from "./components/Generator";
-import Footer from "./components/Footer";
-import { PlanType } from "./data/plans";
+import FeatureCard from "./components/FeatureCard";
+import { features } from "./data/features";
 
 export default function App() {
-  const [plan, setPlan] = useState<PlanType>("FREE");
-
+  const userPlan = "FREE"; // later dynamic
   return (
-    <div className="app">
-      <Header plan={plan} />
-      <PlanSelector plan={plan} setPlan={setPlan} />
-      <Generator disabled={plan === "FREE"} />
-      <Footer />
-    </div>
+    <>
+      <Header plan={userPlan} credits={50} />
+
+      <div className="grid">
+        {features.map(f => (
+          <FeatureCard
+            key={f.id}
+            title={f.title}
+            plan={f.plan}
+            userPlan={userPlan}
+          />
+        ))}
+      </div>
+    </>
   );
 }
