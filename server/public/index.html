@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ARKEES AI</title>
+</head>
+<body>
+  <h1>ARKEES AI</h1>
+  <button onclick="pay()">Pay ₹50</button>
+
+  <script>
+    async function pay() {
+      const res = await fetch("/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          order_amount: 50,
+          customer_id: "USER_001"
+        })
+      });
+
+      const data = await res.json();
+      alert(JSON.stringify(data, null, 2));
+    }
+  </script>
+</body>
+</html>
